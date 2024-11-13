@@ -22,15 +22,15 @@ import numpy as np
 from scipy.integrate import quad
 from scipy.interpolate import interp1d
 
-# sputtered ceramic
-e_c = 1 # yungs modulus     TO DO
-v_c = 2 # poisson coef      TO DO
-t_c = 1 # [m] thickness     TO DO
+# sputtered ceramic (TiN)
+e_c = 600e9 # yungs modulus [GPa]
+v_c = 0.25 # poisson coef      
+t_c = 2.5e-6 # thickness [m]  
 
-# metalic substrate
-e_s = 1 # yungs modulus     TO DO
-v_s = 2 # poisson coef      TO DO
-t_s = 1 # [m] thickness     TO DO
+# metalic substrate (Fe)
+e_s = 200e9 # yungs modulus [GPa]
+v_s = 0.3 # poisson coef      
+t_s = 3e-3 # thickness [m]     
 
 # temperatures [ºC]
 T_d = 300 # deposition      TO DO
@@ -50,7 +50,7 @@ def integrand(T):
     return interp_alpha_s(T) - interp_alpha_c(T)
 
 # Thermal stresses of thin coatings, σc for simple planar geometry
-def thermal_stress(e_c, v_c, t_c, e_s, v_s, t_s, T_d, T_r):
+def thermal_stress():
     e_efc = e_c / (1 - v_c)
     e_efs = e_s / (1 - v_s)
     result, error = quad(integrand, T_r, T_d) # if T_r is outside the interpolation 
@@ -62,5 +62,30 @@ def thermal_stress(e_c, v_c, t_c, e_s, v_s, t_s, T_d, T_r):
     stress_c = numerator / denominator
     return stress_c
 
-stress_c = thermal_stress(e_c, v_c, t_c, e_s, v_s, t_s, T_d, T_r)
-print("Thermal stress =", stress_c)
+def thermal_stress_temp_room(T_d):
+    T = T_d
+    e_efc = e_c / (1 - v_c)
+    e_efs = e_s / (1 - v_s)
+    result, error = quad(integrand, T_r, T) # if T_r is outside the interpolation 
+    #                                           range of alpha_c/alpha_s, imprecision 
+    #                                           can be generated
+    #print("Integration error =", error)
+    integral = result #              TO DO
+    numerator = e_efc * integral
+    denominator = 1 + 4*(e_efc / e_efs)*(t_c / t_s)
+    stress_c = numerator / denominator
+    return stress_c
+
+stress_c = thermal_stress()
+print("Thermal stress =", stress_c*10**-9, "[GPa]")
+
+T_d = np.array([100, 200, 300, 400, 500])
+N = np.size(T_d)
+stress = np.zeros(N)
+
+for i in range(N):
+    stress[i] = thermal_stress_temp_room(T_d[i])
+
+print("room temp.", T_d, "ºC")
+print("stresses", stress*10**-6, "MPa")
+print("stress paper ~[200 500 800 1050 1350] MPa")
