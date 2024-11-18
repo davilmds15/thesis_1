@@ -37,7 +37,7 @@ T_d = 300 # deposition      TO DO
 T_r = 25 # room            
 
 # data from figure 3: 
-T = np.array([100, 250, 500, 650, 1000]) # [ºC]
+T = np.array([100, 250, 500, 650, 1000]) # [ºC] deposition temperature
 alpha_c = np.array([0.67, 0.77, 0.86, 1]) * 10**-5 # [ºC^-1]
 alpha_s = np.array([1.2, 1.5, 1.6, 1.85, 2.4]) * 10**-5 # [ºC^-1]
 
@@ -86,6 +86,6 @@ stress = np.zeros(N)
 for i in range(N):
     stress[i] = thermal_stress_temp_room(T_d[i])
 
-print("room temp.", T_d, "ºC")
+print("deposition temp.", T_d, "ºC")
 print("stresses", stress*10**-6, "MPa")
 print("stress paper ~[200 500 800 1050 1350] MPa")
