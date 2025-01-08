@@ -3,7 +3,7 @@ Filename: replying_riyadi_et_al_work.py
 Author: Davi LIMA MENDES DOS SANTOS
 Institution: Universidade Federal de Santa Maria
 Date Created: 09/11/2024
-Last Modified: 09/11/2024
+Last Modified: 17/12/2024
 Description:
             This code analyzes thermal stress at the interface between ceramic and metal substrates, 
             considering the impact of various parameters, including:
@@ -23,12 +23,12 @@ from scipy.integrate import quad
 from scipy.interpolate import interp1d
 
 # sputtered ceramic (TiN)
-e_c = 600e9 # yungs modulus [GPa]
+e_c = 600e9 # yungs modulus [Pa] 
 v_c = 0.25 # poisson coef      
 t_c = 2.5e-6 # thickness [m]  
 
 # metalic substrate (Fe)
-e_s = 200e9 # yungs modulus [GPa]
+e_s = 200e9 # yungs modulus [Pa] 193-200e9 Pa
 v_s = 0.3 # poisson coef      
 t_s = 3e-3 # thickness [m]     
 
@@ -37,9 +37,12 @@ T_d = 300 # deposition      TO DO
 T_r = 25 # room            
 
 # data from figure 3: 
-T = np.array([100, 250, 500, 650, 1000]) # [ºC] deposition temperature
-alpha_c = np.array([0.67, 0.77, 0.86, 1]) * 10**-5 # [ºC^-1]
-alpha_s = np.array([1.2, 1.5, 1.6, 1.85, 2.4]) * 10**-5 # [ºC^-1]
+#T = np.array([100, 250, 500, 650, 1000]) # [ºC] deposition temperature
+#alpha_c = np.array([0.67, 0.77, 0.86, 1]) * 10**-5 # [ºC^-1]
+#alpha_s = np.array([1.2, 1.5, 1.6, 1.85, 2.4]) * 10**-5 # [ºC^-1]
+T = np.array([100, 200, 300, 400, 500]) # [ºC] deposition temperature
+alpha_c = np.array([7.5, 8.5, 9, 9.2, 9.4]) * 10**-6 # [ºC^-1]
+alpha_s = np.array([1.22, 1.42, 1.54, 1.56, 1.6]) * 10**-5 # [ºC^-1]
 
 # interpolation of the temperature
 T_alpha_c = T[:len(alpha_c)]  
